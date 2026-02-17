@@ -1,0 +1,26 @@
+/**
+ * Validation Middleware using express-validator
+ * 
+ * INTERVIEW POINT: Input validation is critical for API security.
+ * This is similar to .NET FluentValidation or DataAnnotations.
+ */
+const { validationResult } = require('express-validator');
+
+const validate = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            success: false,
+            error: {
+                message: 'Validation failed',
+                details: errors.array().map(err => ({
+                    field: err.path,
+                    message: err.msg
+                }))
+            }
+        });
+    }
+    next();
+};
+
+module.exports = { validate };
