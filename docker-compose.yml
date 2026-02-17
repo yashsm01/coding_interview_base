@@ -1,0 +1,51 @@
+# Docker Compose - Full Stack (API + PostgreSQL)
+# INTERVIEW POINT: Demonstrates container orchestration
+
+version: '3.8'
+
+services:
+  # ── PostgreSQL Database ──
+  db:
+    image: postgres:16-alpine
+    container_name: merch-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: universitymerchdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Node.js API ──
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: merch-api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      NODE_ENV: production
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: universitymerchdb
+      DB_USER: postgres
+      DB_PASSWORD: 1234
+      DB_DIALECT: postgres
+      JWT_SECRET: change-this-in-production
+      JWT_REFRESH_SECRET: change-this-refresh-in-production
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

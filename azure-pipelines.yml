@@ -1,0 +1,116 @@
+# Azure DevOps CI/CD Pipeline
+# INTERVIEW POINT: "How to implement CI/CD in Azure DevOps?"
+# Answer: Push → Trigger → Build → Test → Publish → Deploy
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  nodeVersion: '20.x'
+  azureSubscription: 'your-azure-service-connection'
+  appName: 'coding-interview-api'
+  resourceGroup: 'interview-rg'
+
+stages:
+  # ═══════════════════════════════════════
+  # STAGE 1: BUILD & TEST
+  # ═══════════════════════════════════════
+  - stage: Build
+    displayName: 'Build & Test'
+    jobs:
+      - job: BuildBackend
+        displayName: 'Build Node.js API'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+            displayName: 'Install Node.js'
+
+          - script: |
+              cd backend
+              npm ci
+            displayName: 'Install dependencies'
+
+          - script: |
+              cd backend
+              npm test
+            displayName: 'Run unit tests'
+            continueOnError: false
+
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: 'backend'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/backend.zip'
+            displayName: 'Archive backend'
+
+          - publish: '$(Build.ArtifactStagingDirectory)/backend.zip'
+            artifact: 'backend-artifact'
+            displayName: 'Publish backend artifact'
+
+      - job: BuildFrontend
+        displayName: 'Build Angular App'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+
+          - script: |
+              cd frontend
+              npm ci
+              npm run build -- --configuration=production
+            displayName: 'Build Angular production'
+
+          - publish: 'frontend/dist'
+            artifact: 'frontend-artifact'
+            displayName: 'Publish frontend artifact'
+
+  # ═══════════════════════════════════════
+  # STAGE 2: DEPLOY TO AZURE
+  # ═══════════════════════════════════════
+  - stage: Deploy
+    displayName: 'Deploy to Azure'
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: DeployBackend
+        displayName: 'Deploy API to App Service'
+        environment: 'production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: 'backend-artifact'
+
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    appType: 'webAppLinux'
+                    appName: $(appName)
+                    package: '$(Pipeline.Workspace)/backend-artifact/backend.zip'
+                    runtimeStack: 'NODE|20-lts'
+                  displayName: 'Deploy to Azure App Service'
+
+      - deployment: DeployFrontend
+        displayName: 'Deploy Angular to Static Web App'
+        environment: 'production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: 'frontend-artifact'
+
+                - task: AzureStaticWebApp@0
+                  inputs:
+                    app_location: '$(Pipeline.Workspace)/frontend-artifact'
+                    skip_app_build: true
+                  displayName: 'Deploy to Azure Static Web App'
