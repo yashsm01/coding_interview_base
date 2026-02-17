@@ -1,6 +1,6 @@
 {
   "name": "coding-interview-api",
-  "version": "1.0.0",
+  "version": "1.2.3",
   "description": "Production-ready Express API - Alpha Dezine Full Stack Interview",
   "main": "server.js",
   "scripts": {

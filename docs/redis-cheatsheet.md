@@ -44,7 +44,7 @@ GET "cache:/api/orders/top-universities"
 GET "cache:/api/products/categories"
 ```
 
-### 👤 User Session (Duration: 1 hour)
+### 👤 User Session (Duration: 3 hours)
 ```bash
 # Replace with actual user ID
 GET "user:550e8400-e29b-41d4-a716-446655440000"

@@ -5,13 +5,15 @@
  * Like FastAPI's auto-generated docs — fully interactive, try-it-out ready.
  */
 const swaggerJSDoc = require('swagger-jsdoc');
+const { version } = require('../../package.json');
+const apiVersion = process.env.API_VERSION || `v${version}`;
 
 const options = {
     definition: {
         openapi: '3.0.0',
         info: {
             title: 'University Merchandise API',
-            version: '1.0.0',
+            version: apiVersion,
             description: `
 ## Production-ready REST API for University Merchandise Management
 
@@ -29,8 +31,9 @@ const options = {
             contact: { name: 'Yash', email: 'yash@example.com' }
         },
         servers: [
-            { url: 'http://localhost:5000', description: 'Development' },
-            { url: 'https://coding-interview-api.azurewebsites.net', description: 'Production' }
+            { url: `http://localhost:5000/api/${apiVersion}`, description: `Development (${apiVersion})` },
+            { url: `http://localhost:5001/api/${apiVersion}`, description: `Replica (${apiVersion})` },
+            { url: `https://coding-interview-api.azurewebsites.net/api/${apiVersion}`, description: 'Production' }
         ],
         components: {
             securitySchemes: {

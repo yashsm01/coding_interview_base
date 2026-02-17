@@ -12,7 +12,7 @@ const { authValidation } = require('../dto/validation.rules');
 
 /**
  * @swagger
- * /api/auth/register:
+ * /auth/register:
  *   post:
  *     tags: [Authentication]
  *     summary: Register new user
@@ -35,7 +35,7 @@ router.post('/register', authValidation.register, validate, authController.regis
 
 /**
  * @swagger
- * /api/auth/login:
+ * /auth/login:
  *   post:
  *     tags: [Authentication]
  *     summary: Login and get JWT token
@@ -57,7 +57,7 @@ router.post('/login', authValidation.login, validate, authController.login);
 
 /**
  * @swagger
- * /api/auth/refresh:
+ * /auth/refresh:
  *   post:
  *     tags: [Authentication]
  *     summary: Refresh access token
@@ -66,7 +66,7 @@ router.post('/refresh', authController.refreshToken);
 
 /**
  * @swagger
- * /api/auth/profile:
+ * /auth/profile:
  *   get:
  *     tags: [Authentication]
  *     summary: Get current user profile

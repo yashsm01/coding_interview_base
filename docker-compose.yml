@@ -59,6 +59,37 @@ services:
       JWT_REFRESH_SECRET: change-this-refresh-in-production
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      API_VERSION: v1.2.3
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ── Replica Service (Scaling Demo) ──
+  api-replica:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: merch-api-replica
+    restart: unless-stopped
+    ports:
+      - "5001:5000"
+    environment:
+      PORT: 5000
+      NODE_ENV: development
+      DB_SYNC: "true"
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: universitymerchdb
+      DB_USER: postgres
+      DB_PASSWORD: 1234
+      DB_DIALECT: postgres
+      JWT_SECRET: change-this-in-production
+      JWT_REFRESH_SECRET: change-this-refresh-in-production
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      API_VERSION: v1
     depends_on:
       db:
         condition: service_healthy

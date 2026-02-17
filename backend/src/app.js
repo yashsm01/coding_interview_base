@@ -43,6 +43,7 @@ const limiter = rateLimit({
     max: 100,                   // limit each IP to 100 requests per window
     message: { error: 'Too many requests, please try again later.' }
 });
+// Rate limiting
 app.use('/api/', limiter);
 
 // ═══════════════════════════════════════════════════
@@ -64,11 +65,24 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 // ═══════════════════════════════════════════════════
 // API ROUTES
 // ═══════════════════════════════════════════════════
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/universities', universityRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/seed', seedRoutes);
+const { version } = require('../package.json');
+// PRO TIP: Versioning controlled by Env Var (Docker) > package.json
+const apiVersion = process.env.API_VERSION || `v${version}`;
+
+// Mount routes under versioned path
+const apiRouter = express.Router();
+apiRouter.use('/auth', authRoutes);
+apiRouter.use('/products', productRoutes);
+apiRouter.use('/universities', universityRoutes);
+apiRouter.use('/orders', orderRoutes);
+apiRouter.use('/seed', seedRoutes);
+
+app.use(`/api/${apiVersion}`, apiRouter);
+// app.use('/api', apiRouter); // Optional: Keep unversioned alias if desired, but user asked for versioned.
+
+// Redirect /api to versioned documentation or base
+app.get('/api', (req, res) => res.redirect(`/api/${apiVersion}/health`));
+app.get('/', (req, res) => res.redirect('/api-docs'));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

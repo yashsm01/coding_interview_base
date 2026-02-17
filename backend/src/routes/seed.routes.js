@@ -12,7 +12,7 @@ const logger = require('../config/logger');
 
 /**
  * @swagger
- * /api/seed:
+ * /seed:
  *   post:
  *     tags: [Seed]
  *     summary: 🌱 Seed sample data (dev only)

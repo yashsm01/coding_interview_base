@@ -16,7 +16,7 @@ const { cache } = require('../middleware/cache.middleware');
 
 /**
  * @swagger
- * /api/products:
+ * /products:
  *   get:
  *     tags: [Products]
  *     summary: Get all products (paginated, searchable, sortable)
@@ -94,7 +94,7 @@ router.get('/', cache(300), productValidation.getAll, validate, productControlle
 
 /**
  * @swagger
- * /api/products/categories:
+ * /products/categories:
  *   get:
  *     tags: [Products]
  *     summary: Get all product categories
@@ -119,7 +119,7 @@ router.get('/categories', cache(3600), productController.getCategories);
 
 /**
  * @swagger
- * /api/products/{id}:
+ * /products/{id}:
  *   get:
  *     tags: [Products]
  *     summary: Get product by ID
@@ -150,7 +150,7 @@ router.get('/:id', productController.getById);
 
 /**
  * @swagger
- * /api/products:
+ * /products:
  *   post:
  *     tags: [Products]
  *     summary: Create new product (JWT required)
@@ -212,7 +212,7 @@ router.post('/', authenticate, productValidation.create, validate, productContro
 
 /**
  * @swagger
- * /api/products/{id}:
+ * /products/{id}:
  *   put:
  *     tags: [Products]
  *     summary: Update product (JWT required)
@@ -256,7 +256,7 @@ router.put('/:id', authenticate, productValidation.update, validate, productCont
 
 /**
  * @swagger
- * /api/products/{id}:
+ * /products/{id}:
  *   delete:
  *     tags: [Products]
  *     summary: Delete product (Admin only)

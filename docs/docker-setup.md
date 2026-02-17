@@ -118,7 +118,10 @@ docker network rm merch-network
 | `docker ps` | List running containers |
 | `docker exec -it merch-db psql -U postgres` | Open PostgreSQL shell |
 | `docker exec -it merch-redis redis-cli` | Open Redis shell (See [Redis Cheatsheet](redis-cheatsheet.md)) |
-| `docker exec -it merch-api sh` | Shell into API container |
+| `docker exec -it merch-api sh` | Shell into Main API (Port 5000) |
+| `docker exec -it merch-api-replica sh` | Shell into Replica API (Port 5001) |
+
+> **Note on Scaling**: The `api-replica` service (Port 5001) demonstrates manual scaling. In a real production environment (Kubernetes/Swarm), you would use a Load Balancer (like Nginx/Traefik) in front of multiple replicas.
 
 ---
 

@@ -9,7 +9,7 @@ const { cache } = require('../middleware/cache.middleware');
 
 /**
  * @swagger
- * /api/orders/top-universities:
+ * /orders/top-universities:
  *   get:
  *     tags: [Orders]
  *     summary: Get top universities by sales
@@ -67,7 +67,7 @@ router.get('/top-universities', cache(3600), orderController.getTopUniversities)
 
 /**
  * @swagger
- * /api/orders/university/{universityId}:
+ * /orders/university/{universityId}:
  *   get:
  *     tags: [Orders]
  *     summary: Get orders by university
@@ -99,7 +99,7 @@ router.get('/university/:universityId', orderController.getByUniversity);
 
 /**
  * @swagger
- * /api/orders:
+ * /orders:
  *   post:
  *     tags: [Orders]
  *     summary: Create new order (JWT required)

@@ -8,7 +8,7 @@ const { authenticate, authorize } = require('../middleware/auth.middleware');
 
 /**
  * @swagger
- * /api/universities:
+ * /universities:
  *   get:
  *     tags: [Universities]
  *     summary: Get all active universities
@@ -33,7 +33,7 @@ router.get('/', universityController.getAll);
 
 /**
  * @swagger
- * /api/universities/{id}:
+ * /universities/{id}:
  *   get:
  *     tags: [Universities]
  *     summary: Get university by ID
@@ -64,7 +64,7 @@ router.get('/:id', universityController.getById);
 
 /**
  * @swagger
- * /api/universities:
+ * /universities:
  *   post:
  *     tags: [Universities]
  *     summary: Create university (Admin only)
@@ -123,7 +123,7 @@ router.post('/', authenticate, authorize('admin'), universityController.create);
 
 /**
  * @swagger
- * /api/universities/{id}:
+ * /universities/{id}:
  *   put:
  *     tags: [Universities]
  *     summary: Update university (Admin only)
@@ -166,7 +166,7 @@ router.put('/:id', authenticate, authorize('admin'), universityController.update
 
 /**
  * @swagger
- * /api/universities/{id}:
+ * /universities/{id}:
  *   delete:
  *     tags: [Universities]
  *     summary: Delete university (Admin only, soft delete)
