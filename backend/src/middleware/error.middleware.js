@@ -10,7 +10,44 @@
 const logger = require('../config/logger');
 
 const globalErrorHandler = (err, req, res, next) => {
-    // Default to 500 if no status set
+    // Handle Sequelize unique constraint errors
+    if (err.name === 'SequelizeUniqueConstraintError') {
+        const field = err.errors?.[0]?.path || 'field';
+        const value = err.errors?.[0]?.value || '';
+        return res.status(409).json({
+            success: false,
+            error: {
+                message: `${field} '${value}' already exists`,
+                statusCode: 409
+            }
+        });
+    }
+
+    // Handle Sequelize validation errors
+    if (err.name === 'SequelizeValidationError') {
+        const messages = err.errors.map(e => e.message);
+        return res.status(400).json({
+            success: false,
+            error: {
+                message: 'Validation failed',
+                details: messages,
+                statusCode: 400
+            }
+        });
+    }
+
+    // Handle Sequelize foreign key errors
+    if (err.name === 'SequelizeForeignKeyConstraintError') {
+        return res.status(400).json({
+            success: false,
+            error: {
+                message: 'Referenced record does not exist. Check your IDs.',
+                statusCode: 400
+            }
+        });
+    }
+
+    // Default error handling
     const statusCode = err.status || err.statusCode || 500;
     const message = err.message || 'Internal Server Error';
 

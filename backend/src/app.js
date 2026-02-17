@@ -18,6 +18,7 @@ const authRoutes = require('./routes/auth.routes');
 const productRoutes = require('./routes/product.routes');
 const universityRoutes = require('./routes/university.routes');
 const orderRoutes = require('./routes/order.routes');
+const seedRoutes = require('./routes/seed.routes');
 
 // Middleware imports
 const { requestLogger } = require('./middleware/logger.middleware');
@@ -67,6 +68,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/universities', universityRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/seed', seedRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

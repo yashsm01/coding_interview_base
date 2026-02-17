@@ -46,10 +46,10 @@ const { authenticate } = require('../middleware/auth.middleware');
  *                       universityId:
  *                         type: string
  *                         format: uuid
- *                       totalSales:
+ *                       total_sales:
  *                         type: number
  *                         example: 15250.50
- *                       orderCount:
+ *                       order_count:
  *                         type: integer
  *                         example: 42
  *                       university:

@@ -26,8 +26,8 @@ class OrderRepository extends BaseRepository {
         return Order.findAll({
             attributes: [
                 'universityId',
-                [Sequelize.fn('SUM', Sequelize.col('amount')), 'totalSales'],
-                [Sequelize.fn('COUNT', Sequelize.col('Order.id')), 'orderCount']
+                [Sequelize.fn('SUM', Sequelize.col('amount')), 'total_sales'],
+                [Sequelize.fn('COUNT', Sequelize.col('Order.id')), 'order_count']
             ],
             include: [{
                 model: University,
@@ -35,7 +35,7 @@ class OrderRepository extends BaseRepository {
                 attributes: ['name', 'location']
             }],
             group: ['universityId', 'university.id', 'university.name', 'university.location'],
-            order: [[Sequelize.literal('totalSales'), 'DESC']],
+            order: [[Sequelize.literal('total_sales'), 'DESC']],
             limit: topN
         });
     }

@@ -16,8 +16,8 @@ async function startServer() {
     await sequelize.authenticate();
     logger.info('✅ Database connection established successfully');
 
-    // Sync models (development only - use migrations in production)
-    if (process.env.NODE_ENV !== 'production') {
+    // Sync models (development only or if DB_SYNC is true)
+    if (process.env.NODE_ENV !== 'production' || process.env.DB_SYNC === 'true') {
       await sequelize.sync({ alter: true });
       logger.info('✅ Database models synchronized');
     }

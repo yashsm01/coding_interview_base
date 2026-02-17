@@ -34,7 +34,8 @@ services:
       - "5000:5000"
     environment:
       PORT: 5000
-      NODE_ENV: production
+      NODE_ENV: development
+      DB_SYNC: "true"
       DB_HOST: db
       DB_PORT: 5432
       DB_NAME: universitymerchdb
