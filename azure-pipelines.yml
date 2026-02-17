@@ -13,7 +13,7 @@ pool:
 
 variables:
   nodeVersion: '20.x'
-  azureSubscription: 'your-azure-service-connection'
+  azureSubscription: 'interview-service-connection'
   appName: 'coding-interview-api'
   resourceGroup: 'interview-rg'
 
