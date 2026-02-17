@@ -29,7 +29,7 @@ const app = express();
 // ═══════════════════════════════════════════════════
 // SECURITY MIDDLEWARE (First in pipeline)
 // ═══════════════════════════════════════════════════
-app.use(helmet());  // Sets security HTTP headers
+app.use(helmet({ contentSecurityPolicy: false }));  // Sets security HTTP headers (CSP disabled for Swagger UI)
 app.use(cors({
     origin: process.env.CORS_ORIGIN || '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],

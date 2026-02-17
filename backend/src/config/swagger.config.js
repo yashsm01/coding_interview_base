@@ -31,6 +31,7 @@ const options = {
             contact: { name: 'Yash', email: 'yash@example.com' }
         },
         servers: [
+            { url: `/api/${apiVersion}`, description: 'Current Server' },
             { url: `http://localhost:5000/api/${apiVersion}`, description: `Development (${apiVersion})` },
             { url: `http://localhost:5001/api/${apiVersion}`, description: `Replica (${apiVersion})` },
             { url: `https://coding-interview-api.azurewebsites.net/api/${apiVersion}`, description: 'Production' }

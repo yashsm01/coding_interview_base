@@ -74,9 +74,9 @@ services:
     container_name: merch-api-replica
     restart: unless-stopped
     ports:
-      - "5001:5000"
+      - "5001:5001"
     environment:
-      PORT: 5000
+      PORT: 5001
       NODE_ENV: development
       DB_SYNC: "true"
       DB_HOST: db
