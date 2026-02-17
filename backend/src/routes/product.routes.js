@@ -12,6 +12,7 @@ const productController = require('../controllers/product.controller');
 const { authenticate, authorize } = require('../middleware/auth.middleware');
 const { validate } = require('../middleware/validate.middleware');
 const { productValidation } = require('../dto/validation.rules');
+const { cache } = require('../middleware/cache.middleware');
 
 /**
  * @swagger
@@ -88,7 +89,8 @@ const { productValidation } = require('../dto/validation.rules');
  *                       type: integer
  *                       example: 5
  */
-router.get('/', productValidation.getAll, validate, productController.getAll);
+// Cache product list for 5 minutes
+router.get('/', cache(300), productValidation.getAll, validate, productController.getAll);
 
 /**
  * @swagger
@@ -112,7 +114,8 @@ router.get('/', productValidation.getAll, validate, productController.getAll);
  *                     type: string
  *                   example: ["Apparel", "Accessories", "Stationery"]
  */
-router.get('/categories', productController.getCategories);
+// Cache categories for 1 hour
+router.get('/categories', cache(3600), productController.getCategories);
 
 /**
  * @swagger

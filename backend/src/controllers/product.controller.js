@@ -8,6 +8,7 @@
  * - Consistent response format: { success, data, pagination }
  */
 const productService = require('../services/product.service');
+const { clearCache } = require('../middleware/cache.middleware');
 
 class ProductController {
     /**
@@ -45,6 +46,8 @@ class ProductController {
     async create(req, res, next) {
         try {
             const product = await productService.createProduct(req.body);
+            // Invalidate product cache
+            await clearCache('/api/products');
             res.status(201).json({
                 success: true,
                 message: 'Product created successfully',
@@ -61,6 +64,8 @@ class ProductController {
     async update(req, res, next) {
         try {
             const product = await productService.updateProduct(req.params.id, req.body);
+            // Invalidate product cache
+            await clearCache('/api/products');
             res.json({
                 success: true,
                 message: 'Product updated successfully',
@@ -77,6 +82,8 @@ class ProductController {
     async delete(req, res, next) {
         try {
             const result = await productService.deleteProduct(req.params.id);
+            // Invalidate product cache
+            await clearCache('/api/products');
             res.json({ success: true, ...result });
         } catch (error) {
             next(error);

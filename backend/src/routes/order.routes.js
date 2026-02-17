@@ -5,6 +5,7 @@ const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/order.controller');
 const { authenticate } = require('../middleware/auth.middleware');
+const { cache } = require('../middleware/cache.middleware');
 
 /**
  * @swagger
@@ -62,7 +63,7 @@ const { authenticate } = require('../middleware/auth.middleware');
  *                             type: string
  *                             example: Cambridge, MA
  */
-router.get('/top-universities', orderController.getTopUniversities);
+router.get('/top-universities', cache(3600), orderController.getTopUniversities);
 
 /**
  * @swagger

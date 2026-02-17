@@ -10,6 +10,16 @@ const jwt = require('jsonwebtoken');
 const userRepository = require('../repositories/user.repository');
 const logger = require('../config/logger');
 
+const redisClient = require('../config/redis.config');
+
+// Helper to cache user
+const cacheUser = async (user) => {
+    if (redisClient.isOpen) {
+        // Cache user profile for 3 hours
+        await redisClient.setEx(`user:${user.id}`, 10800, JSON.stringify(user));
+    }
+};
+
 class AuthService {
     generateTokens(user) {
         const payload = { id: user.id, email: user.email, role: user.role };
@@ -41,6 +51,9 @@ class AuthService {
         const user = await userRepository.create({ username, email, password, role });
         const tokens = this.generateTokens(user);
 
+        // Cache user session
+        await cacheUser(user);
+
         logger.info(`New user registered: ${email}`);
         return { user: user.toJSON(), ...tokens };
     }
@@ -57,6 +70,10 @@ class AuthService {
         }
 
         const tokens = this.generateTokens(user);
+
+        // Cache user session
+        await cacheUser(user);
+
         logger.info(`User logged in: ${email}`);
 
         return { user: user.toJSON(), ...tokens };

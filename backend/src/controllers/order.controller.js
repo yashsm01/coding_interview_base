@@ -2,6 +2,7 @@
  * Order Controller
  */
 const orderService = require('../services/order.service');
+const { clearCache } = require('../middleware/cache.middleware');
 
 class OrderController {
     async getTopUniversities(req, res, next) {
@@ -26,6 +27,8 @@ class OrderController {
     async create(req, res, next) {
         try {
             const order = await orderService.createOrder(req.body);
+            // Invalidate top universities cache
+            await clearCache('/api/orders/top-universities');
             res.status(201).json({ success: true, data: order });
         } catch (error) {
             next(error);

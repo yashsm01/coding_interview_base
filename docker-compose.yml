@@ -23,6 +23,19 @@ services:
       timeout: 5s
       retries: 5
 
+  # ── Redis Cache ──
+  redis:
+    image: redis:7-alpine
+    container_name: merch-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   # ── Node.js API ──
   api:
     build:
@@ -44,8 +57,12 @@ services:
       DB_DIALECT: postgres
       JWT_SECRET: change-this-in-production
       JWT_REFRESH_SECRET: change-this-refresh-in-production
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
 volumes:

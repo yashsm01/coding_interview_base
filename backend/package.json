@@ -21,6 +21,7 @@
     "mssql": "^11.0.1",
     "pg": "^8.18.0",
     "pg-hstore": "^2.3.4",
+    "redis": "^5.11.0",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",

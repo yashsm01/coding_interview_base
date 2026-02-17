@@ -13,6 +13,22 @@ Controller → Service → Repository → Database
      ↓           ↓           ↓
   HTTP only   Business    Data Access
               Logic       (Sequelize)
+     ↓
+   Redis
+(Caching)
+```
+
+## Quick Start (Docker - Recommended)
+```bash
+docker-compose up --build
+```
+
+## Quick Start (Local)
+```bash
+# 1. Start Redis & SQL Server/Postgres
+# 2. Configure .env
+npm install
+npm run dev
 ```
 
 ## API Endpoints

@@ -117,6 +117,7 @@ docker network rm merch-network
 | `docker-compose logs -f db` | Follow DB logs |
 | `docker ps` | List running containers |
 | `docker exec -it merch-db psql -U postgres` | Open PostgreSQL shell |
+| `docker exec -it merch-redis redis-cli` | Open Redis shell (See [Redis Cheatsheet](redis-cheatsheet.md)) |
 | `docker exec -it merch-api sh` | Shell into API container |
 
 ---
